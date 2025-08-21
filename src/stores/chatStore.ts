@@ -43,6 +43,8 @@ interface ChatState {
   // Security
   password: string
   isPasswordValid: boolean
+  settingsPassword: string
+  isSettingsPasswordValid: boolean
   
   // Actions
   addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void
@@ -58,6 +60,8 @@ interface ChatState {
   setShowCommentTrigger: (show: boolean) => void
   setPassword: (password: string) => void
   setPasswordValid: (valid: boolean) => void
+  setSettingsPassword: (password: string) => void
+  setSettingsPasswordValid: (valid: boolean) => void
   clearChat: () => void
 }
 
@@ -79,6 +83,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   showCommentTrigger: false,
   password: '',
   isPasswordValid: false,
+  settingsPassword: '',
+  isSettingsPasswordValid: false,
 
   // Actions
   addMessage: (message) => {
@@ -160,6 +166,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   setPasswordValid: (valid) => {
     set({ isPasswordValid: valid })
+  },
+
+  setSettingsPassword: (password) => {
+    set({ settingsPassword: password })
+  },
+
+  setSettingsPasswordValid: (valid) => {
+    set({ isSettingsPasswordValid: valid })
   },
 
   clearChat: () => {

@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { useChatStore } from '@/stores/chatStore'
 import { PERSONALITY_PRESETS } from '@/types'
+import { SettingsPasswordPrompt } from '@/components/auth/SettingsPasswordPrompt'
 
 interface AdvancedSettingsProps {
   isOpen: boolean
@@ -22,7 +23,7 @@ interface AdvancedSettingsProps {
 }
 
 export function AdvancedSettings({ isOpen, onClose }: AdvancedSettingsProps) {
-  const { personalitySettings, updatePersonalitySettings, setSelectedPersonality } = useChatStore()
+  const { personalitySettings, updatePersonalitySettings, setSelectedPersonality, isSettingsPasswordValid } = useChatStore()
 
   if (!isOpen) return null
 
@@ -128,8 +129,9 @@ export function AdvancedSettings({ isOpen, onClose }: AdvancedSettingsProps) {
             </div>
           </div>
 
-          {/* Advanced Controls Tabs */}
-          <Tabs defaultValue="basic" className="w-full">
+          {/* Advanced Controls Tabs - Password Protected */}
+          {isSettingsPasswordValid ? (
+            <Tabs defaultValue="basic" className="w-full">
             <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7">
               <TabsTrigger value="basic">📱 Basic</TabsTrigger>
               <TabsTrigger value="structure">📊 Structure</TabsTrigger>
@@ -508,6 +510,9 @@ export function AdvancedSettings({ isOpen, onClose }: AdvancedSettingsProps) {
               </div>
             </TabsContent>
           </Tabs>
+          ) : (
+            <SettingsPasswordPrompt />
+          )}
 
           {/* Action Buttons */}
           <div className="flex justify-between pt-4 border-t">
