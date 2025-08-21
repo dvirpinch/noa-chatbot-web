@@ -5,7 +5,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,6 +18,7 @@ import { DebugDashboard } from '@/components/agents/DebugDashboard'
 export default function ChatPage() {
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const {
     messages,
@@ -37,6 +38,15 @@ export default function ChatPage() {
   } = useChatStore()
 
   const { processMessage } = useAgents()
+
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return
@@ -245,6 +255,9 @@ export default function ChatPage() {
               </>
             )}
             
+            {/* Auto-scroll target */}
+            <div ref={messagesEndRef} />
+            
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-2 max-w-[80%]">
@@ -287,6 +300,17 @@ export default function ChatPage() {
           </div>
         </Card>
       </main>
+
+      {/* Floating Settings Button */}
+      <div className="fixed bottom-20 right-4 z-40">
+        <Button
+          onClick={() => setShowAdvancedSettings(true)}
+          className="h-12 w-12 rounded-full bg-purple-500 hover:bg-purple-600 shadow-lg"
+          title="Quick Settings"
+        >
+          ⚙️
+        </Button>
+      </div>
 
       {/* Footer */}
       <footer className="text-center text-sm text-gray-500 py-4">
