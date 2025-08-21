@@ -42,14 +42,29 @@ export async function POST(request: NextRequest) {
       chatHistory,
       personalitySettings,
       currentPlan,
-      readinessHistory
+      readinessHistory,
+      password
     }: {
       userMessage: string
       chatHistory: Message[]
       personalitySettings: PersonalitySettings
       currentPlan?: SalesPlan
       readinessHistory?: ReadinessAssessment[]
+      password?: string
     } = body
+
+    // Security: Check password before processing
+    const REQUIRED_PASSWORD = "anotherme"
+    if (!password || password !== REQUIRED_PASSWORD) {
+      return NextResponse.json({
+        success: false,
+        error: "Authentication required",
+        response: {
+          message: "Please enter the access code to continue.",
+          raw_response: "Authentication failed"
+        }
+      }, { status: 401 })
+    }
 
     const startTime = Date.now()
 

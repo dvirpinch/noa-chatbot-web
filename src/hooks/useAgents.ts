@@ -11,6 +11,7 @@ export function useAgents() {
     personalitySettings,
     currentPlan,
     readinessHistory,
+    password,
     addMessage,
     addAgentLog,
     updateCurrentPlan,
@@ -37,7 +38,8 @@ export function useAgents() {
           chatHistory: messages,
           personalitySettings,
           currentPlan,
-          readinessHistory
+          readinessHistory,
+          password
         })
       })
 

@@ -40,6 +40,10 @@ interface ChatState {
   // Purchase interaction
   showCommentTrigger: boolean
   
+  // Security
+  password: string
+  isPasswordValid: boolean
+  
   // Actions
   addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void
   addAgentLog: (log: Omit<AgentLog, 'id' | 'timestamp'>) => void
@@ -52,6 +56,8 @@ interface ChatState {
   setShowDebugPanel: (show: boolean) => void
   setSelectedPersonality: (personality: string) => void
   setShowCommentTrigger: (show: boolean) => void
+  setPassword: (password: string) => void
+  setPasswordValid: (valid: boolean) => void
   clearChat: () => void
 }
 
@@ -71,6 +77,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   selectedPersonality: 'Chen',
   personalitySettings: DEFAULT_PERSONALITY,
   showCommentTrigger: false,
+  password: '',
+  isPasswordValid: false,
 
   // Actions
   addMessage: (message) => {
@@ -144,6 +152,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   setShowCommentTrigger: (show) => {
     set({ showCommentTrigger: show })
+  },
+
+  setPassword: (password) => {
+    set({ password })
+  },
+
+  setPasswordValid: (valid) => {
+    set({ isPasswordValid: valid })
   },
 
   clearChat: () => {

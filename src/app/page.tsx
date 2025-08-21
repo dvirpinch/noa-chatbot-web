@@ -14,6 +14,7 @@ import { useChatStore } from '@/stores/chatStore'
 import { useAgents } from '@/hooks/useAgents'
 import { AdvancedSettings } from '@/components/settings/AdvancedSettings'
 import { DebugDashboard } from '@/components/agents/DebugDashboard'
+import { PasswordPrompt } from '@/components/auth/PasswordPrompt'
 
 export default function ChatPage() {
   const [inputValue, setInputValue] = useState('')
@@ -29,6 +30,7 @@ export default function ChatPage() {
     readinessHistory,
     currentPlan,
     pendingPurchaseRequest,
+    isPasswordValid,
     setShowAdvancedSettings,
     setShowDebugPanel,
     clearChat,
@@ -47,6 +49,11 @@ export default function ChatPage() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Security: Show password prompt if not authenticated
+  if (!isPasswordValid) {
+    return <PasswordPrompt />
+  }
 
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return
@@ -297,7 +304,7 @@ export default function ChatPage() {
                 Send
               </Button>
             </div>
-          </div>
+        </div>
         </Card>
       </main>
 
