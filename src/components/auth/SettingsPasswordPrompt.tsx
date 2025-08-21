@@ -25,15 +25,28 @@ export function SettingsPasswordPrompt() {
     setIsSubmitting(true)
     setError('')
 
-    // Check password locally (no API call needed for settings)
-    const REQUIRED_SETTINGS_PASSWORD = "Dvir123"
-    
-    if (inputPassword === REQUIRED_SETTINGS_PASSWORD) {
-      setSettingsPassword(inputPassword)
-      setSettingsPasswordValid(true)
-    } else {
-      setError('Invalid access code for advanced settings.')
-      setInputPassword('')
+    // Validate password securely via backend
+    try {
+      const response = await fetch('/api/validate-settings-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: inputPassword })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.valid) {
+          setSettingsPassword(inputPassword)
+          setSettingsPasswordValid(true)
+        } else {
+          setError('Invalid access code for advanced settings.')
+          setInputPassword('')
+        }
+      } else {
+        setError('Connection error. Please try again.')
+      }
+    } catch {
+      setError('Connection error. Please try again.')
     }
 
     setIsSubmitting(false)
